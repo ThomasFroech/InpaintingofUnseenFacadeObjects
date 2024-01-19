@@ -59,10 +59,12 @@ with open(file_path, 'r') as file:
 # Access the values
 n_div = parameter_data["n_div"]
 tolerance = parameter_data["tolerance"]
+paramRansac= parameter_data["RANSACParam"]
 
 # Print the values
 print(f"n_div: {n_div}")
 print(f"tolerance: {tolerance}")
+print(f"RANSAC parameters {paramRansac}")
 
 # -- Find all .pcd files in the respective directory
 os.chdir(DIRECTORY_1)

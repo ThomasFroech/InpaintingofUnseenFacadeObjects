@@ -1,4 +1,9 @@
 {
   "n_div": 7,
-  "tolerance":0.7
+  "tolerance":0.7,
+   "RANSACParam": {
+    "thresh": 0.005,
+    "minPoints": 10,
+    "maxIteration": 1000
+  }
  }
