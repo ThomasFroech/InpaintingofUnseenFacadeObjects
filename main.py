@@ -48,30 +48,29 @@ except:
     print("No mesh path given.")
 
 # -- Find all .pcd files in the respective directory
-#os.chdir(DIRECTORY_1)
+os.chdir(DIRECTORY_1)
 # -- Supported extensions
-#types = ('*.pcd')
+types = ('*.pcd')
 # Empty python lists for storage
-#files_found = []
-#point_clouds = []
+files_found = []
+point_clouds = []
 # Finding all the .pcd files
-#for files in types:
-#    files_found.extend(glob.glob(files))
+for files in types:
+    files_found.extend(glob.glob(files))
 # Iterating through all the found files
-#print("Name of Fist File: ", files_found[0])
-#for f in files_found:
-#    FILENAME = f[:f.rfind('.pcd')]
-#    #print("Filename: ", FILENAME)
-#    FULLPATH = os.path.join(DIRECTORY_1, f)
-#    # Creating 'MLSPointCloud objects; for ech pcd file one
-#    # and append them to a python list
-#    point_cloud = pcm.MLSPointCloud(file_path=FULLPATH, description=FILENAME)
-#    point_clouds.append(point_cloud)
-
+print("Name of Fist File: ", files_found[0])
+for f in files_found:
+    FILENAME = f[:f.rfind('.pcd')]
+    #print("Filename: ", FILENAME)
+    FULLPATH = os.path.join(DIRECTORY_1, f)
+    # Creating 'MLSPointCloud objects; for ech pcd file one
+    # and append them to a python list
+    point_cloud = pcm.MLSPointCloud(file_path=FULLPATH, description=FILENAME)
+    point_clouds.append(point_cloud)
 # Create a conflict map generator object
-#cMapGen_1 = cmg.ConflictMapGenerator(pointClouds=point_clouds, output_path=RESULT,
-#                                     mesh_path=MESHPATH)
-#cMapGen_1.create_conflict_map(spec='obj')
+cMapGen_1 = cmg.ConflictMapGenerator(pointClouds=point_clouds, output_path=RESULT,
+                                     mesh_path=MESHPATH)
+cMapGen_1.create_conflict_map(spec='obj')
 
 # Comment the following code block in for randomly generating conflict maps
 
@@ -90,15 +89,15 @@ except:
 
 # Comment in in case you want to derive a conflict map from an LOD3 model that has been converted to the .obj format before
 # Finding all CityGML datasets
-cMapGen_1 = cmg.ConflictMapGenerator(output_path=RESULT, ground_truth_path=GROUNDTRUTH)
+#cMapGen_1 = cmg.ConflictMapGenerator(output_path=RESULT, ground_truth_path=GROUNDTRUTH)
 
-cMapGen_1.create_conflict_map_from_LOD3()
+#cMapGen_1.create_conflict_map_from_LOD3()
 
 # Messung der Endzeit
-endzeit = time.time()
+#endzeit = time.time()
 
 # Berechnung der Laufzeit
-laufzeit = endzeit - startzeit
-print(f"The duration of the program was {laufzeit:.6f} seconds")
+#laufzeit = endzeit - startzeit
+#print(f"The duration of the program was {laufzeit:.6f} seconds")
 
 

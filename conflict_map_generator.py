@@ -11,15 +11,19 @@ import math
 import pyransac3d as pyrsc
 from scipy.linalg import svd
 
+
 class ConflictMapGenerator:
 
-    def __init__(self, pointClouds=None, cityModels=None, output_path=None, mesh_path=None, ground_truth_path=None):
+    def __init__(self, pointClouds=None, cityModels=None, output_path=None, mesh_path=None, ground_truth_path=None,
+                 n_div=0, tol=0):
         self._pointClouds = pointClouds
         self._cityModels = cityModels
         self._output_path = output_path
         self._mesh = None
         self._meshPath = mesh_path
         self._ground_truth_path = ground_truth_path
+        self._n_div = n_div
+        self._tol = tol
 
     # Getter methods
     def get_pointClouds(self):
@@ -40,6 +44,12 @@ class ConflictMapGenerator:
     def get_ground_truth_path(self):
         return self._ground_truth_path
 
+    def get_n_div(self):
+        return self._n_div
+
+    def get_tol(self):
+        return self._tol
+
     # Setter methods
     def set_pointClouds(self, new_pointClouds):
         self._pointClouds = new_pointClouds
@@ -59,11 +69,17 @@ class ConflictMapGenerator:
     def set_ground_truth_path(self, new_ground_truth_path):
         self._ground_truth_path = new_ground_truth_path
 
+    def set_n_div(self, new_n_div):
+        self._n_div=new_n_div
+
+    def set_tol(self, new_tol):
+        self._tol = new_tol
+
     # Further Methods
     # This function is copied from the CityGML2OBJ functionality
     def remove_reccuring(self, list_vertices):
-        #"""Removes recurring vertices, which messes up the triangulation.
-        #Inspired by http://stackoverflow.com/a/1143432"""
+        # """Removes recurring vertices, which messes up the triangulation.
+        # Inspired by http://stackoverflow.com/a/1143432"""
         # last_point = list_vertices[-1]
         list_vertices_without_last = list_vertices[:-1]
         found = set()
@@ -80,7 +96,6 @@ class ConflictMapGenerator:
         # Durchsuchen des Verzeichnisses nach Dateien
         files = os.listdir(ppath)
         supported_formats = [".obj"]  # Unterstützte Dateiformate
-
 
         for file in files:
             file_extension = os.path.splitext(file)[1].lower()
@@ -266,15 +281,15 @@ class ConflictMapGenerator:
     # just a little helper function to define the colors in the graphics according to the evaluated hit distance
     def color_by_distance(self, diff):
         tolerance = 0.700
-        if diff > tolerance:# and diff < 3.00:
+        if diff > tolerance:  # and diff < 3.00:
             return 'black'
-        elif diff < -tolerance:# and diff > -3.00:
+        elif diff < -tolerance:  # and diff > -3.00:
             return 'red'
-        elif abs(diff) <= tolerance:# and abs(diff) < 3.00:
+        elif abs(diff) <= tolerance:  # and abs(diff) < 3.00:
             return 'green'
-        #elif diff > 3.00:
+        # elif diff > 3.00:
         #    return 'yellow'
-        #elif diff < -3.00:
+        # elif diff < -3.00:
         #     return 'white'
 
     # just a little helper function that is used to obtain a dictionary that contains triangle indices and their
@@ -304,7 +319,7 @@ class ConflictMapGenerator:
             # loading the mesh file by calling the respective function
             self.load_mesh()
             # retrieving the mesh object
-            self.subdivide_meshes(5)
+            self.subdivide_meshes(2)
             meshList = self.get_mesh()
 
             # retrieving the viewpoints for the ray casting
@@ -663,8 +678,8 @@ class ConflictMapGenerator:
             rotated_points = np.dot(centered_points, rotation_matrix.T)
             print("Rotated points")
             rotated_points += centroid
-            #print("vertices: ", np.asarray(vertices))
-            #calculation of the main facade plane
+            # print("vertices: ", np.asarray(vertices))
+            # calculation of the main facade plane
             # calculation of the main facade plane with RANSAC
             plane1 = pyrsc.Plane()
             print(rotated_points.shape)
@@ -700,10 +715,10 @@ class ConflictMapGenerator:
 
                 if confirming == True:
                     triangle_patch = Polygon(projectedTriangle, closed=True, edgecolor='green', linewidth=0.1,
-                                                facecolor='green')
+                                             facecolor='green')
                 else:
                     triangle_patch = Polygon(projectedTriangle, closed=True, edgecolor='red', linewidth=0.1,
-                                                facecolor='red')
+                                             facecolor='red')
                 collection.append(triangle_patch)
 
             # Create a PatchCollection
