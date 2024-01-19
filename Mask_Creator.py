@@ -20,31 +20,31 @@ def normalize(pointArray):
     print("Mean Point: ", xmean, " ", ymean, " ", zmean)
     # Performing the actual translation
     length = len(pointArray[:, 0])
-    pointArrayTranslated = np.zeros((length, 3))
+    point_array_translated = np.zeros((length, 3))
 
     a = 0
     for i in pointArray[:, 0]:
-        pointArrayTranslated[a, 0] = pointArray[a, 0] - xmean
-        pointArrayTranslated[a, 1] = pointArray[a, 1] - ymean
-        pointArrayTranslated[a, 2] = pointArray[a, 2] - zmean
+        point_array_translated[a, 0] = pointArray[a, 0] - xmean
+        point_array_translated[a, 1] = pointArray[a, 1] - ymean
+        point_array_translated[a, 2] = pointArray[a, 2] - zmean
         a = a + 1
 
     # Step 3: Scale invariance
     # finding the indices of the maximal coordinate values of the point cloud in each direction in order to find
     # A factor to scale the point cloud's furthest point to a standard distance
     ind_maxValuesXYZ = np.zeros((1, 3))
-    ind_maxValuesXYZ[0, 0] = np.argmax(np.absolute(pointArrayTranslated[:, 0]))
-    ind_maxValuesXYZ[0, 1] = np.argmax(np.absolute(pointArrayTranslated[:, 1]))
-    ind_maxValuesXYZ[0, 2] = np.argmax(np.absolute(pointArrayTranslated[:, 2]))
+    ind_maxValuesXYZ[0, 0] = np.argmax(np.absolute(point_array_translated[:, 0]))
+    ind_maxValuesXYZ[0, 1] = np.argmax(np.absolute(point_array_translated[:, 1]))
+    ind_maxValuesXYZ[0, 2] = np.argmax(np.absolute(point_array_translated[:, 2]))
     # print("Maximal value indices: ", ind_maxValuesXYZ)
     # finding the actual values, and the largest one of these values
     a = int(ind_maxValuesXYZ[0, 0])
     b = int(ind_maxValuesXYZ[0, 1])
     c = int(ind_maxValuesXYZ[0, 2])
     maxValuesXYZ = np.ones((1, 3))
-    maxValuesXYZ[0, 0] = pointArrayTranslated[a, 0]
-    maxValuesXYZ[0, 1] = pointArrayTranslated[b, 1]
-    maxValuesXYZ[0, 2] = pointArrayTranslated[c, 2]
+    maxValuesXYZ[0, 0] = point_array_translated[a, 0]
+    maxValuesXYZ[0, 1] = point_array_translated[b, 1]
+    maxValuesXYZ[0, 2] = point_array_translated[c, 2]
     # Calculation of tha factor that the whole point cloud should be scaled with
     # so that scale invariance is achieved
     ind_maxMaxValuesXYZ = np.argmax(np.absolute(maxValuesXYZ))
@@ -54,10 +54,10 @@ def normalize(pointArray):
     pos = 0
     pointArrayTraRotSca = np.zeros((length, 3))
     # print("TEST: ", pointArrayTraRot)
-    for m in pointArrayTranslated[:, 0]:
+    for m in point_array_translated[:, 0]:
         pos2 = 0
-        for n in pointArrayTranslated[0, :]:
-            pointArrayTraRotSca[pos, pos2] = scalingFactor * pointArrayTranslated[pos, pos2]
+        for n in point_array_translated[0, :]:
+            pointArrayTraRotSca[pos, pos2] = scalingFactor * point_array_translated[pos, pos2]
             pos2 = pos2 + 1
         pos = pos + 1
     # write the nupy array to a o3d Pointcloud file

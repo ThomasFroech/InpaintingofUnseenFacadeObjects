@@ -15,7 +15,7 @@ from scipy.linalg import svd
 class ConflictMapGenerator:
 
     def __init__(self, point_clouds=None, city_models=None, output_path=None, mesh_path=None, ground_truth_path=None,
-                 n_div=0, tol=0, ransac_param=None, lod3_tolerance=None):
+                 n_div=0, tol=0, ransac_param=None, lod3_tolerance=None, path_to_annot_images=None):
         self._point_clouds = point_clouds
         self._city_models = city_models
         self._output_path = output_path
@@ -26,6 +26,7 @@ class ConflictMapGenerator:
         self._tol = tol
         self._ransac_param = ransac_param
         self._lod3_tolerance = lod3_tolerance
+        self._path_to_annot_images = path_to_annot_images
 
     # Getter methods
     def get_point_clouds(self):
@@ -58,6 +59,9 @@ class ConflictMapGenerator:
     def get_lod3_tolerance(self):
         return self._lod3_tolerance
 
+    def get_path_to_annot_images(self):
+        return self._path_to_annot_images
+
     # Setter methods
     def set_point_clouds(self, new_pointClouds):
         self._point_clouds = new_pointClouds
@@ -88,6 +92,9 @@ class ConflictMapGenerator:
 
     def set_lod3Tolerance(self, new_lod3Tolerance):
         self._lod3_tolerance = new_lod3Tolerance
+
+    def set_path_to_annot_images(self, new_path_to_annot_images):
+        self._path_to_annot_images = new_path_to_annot_images
 
     # Further Methods
     # This function is copied from the CityGML2OBJ functionality
@@ -763,23 +770,28 @@ class ConflictMapGenerator:
             print("counter: ", cfMapCounter)
 
         return 0
-    def deriveFromAnnotation(self, source_database):
+    def derive_from_annotation(self, source_database):
         # This function can be applied ion order to derive conflict maps from annotated images of facades
         # There is functionalities to deploy it for the cmp-database and the etrims database
-        # Todo: Add functionalities to give the path to this function vie the environment variables
-        path_to_etrims = []
-        path_to_cmp = []
+        # Source database can take two different parameter:
+        #  1. "cmp"
+        #  2. "etrims"
+        # The mapping of the annotations that these databases feature are dataset-specific and can not be applied
+        # for another dataset
+        path_to_etrims = self.get_path_to_annot_images()
+        path_to_cmp = self.get_path_to_annot_images()
+        print(f"Searching for annotated images in {self.get_path_to_annot_images()}")
 
         if source_database == "etrims":
             # Reading the data
             image_list = []
             image_names = []
-            for annotatedImage in os.listdir(path_to_etrims):
-                if annotatedImage.endswith(".png"):
-                    imagePath = os.path.join(path_to_etrims, annotatedImage)
-                    image = Image.open(imagePath)
+            for annotated_image in os.listdir(path_to_etrims):
+                if annotated_image.endswith(".png"):
+                    image_path = os.path.join(path_to_etrims, annotated_image)
+                    image = Image.open(image_path)
                     image_list.append(image)
-                    image_names.append(annotatedImage)
+                    image_names.append(annotated_image)
             print(len(image_list), "annotated images have been found.")
             counter = 0
             # iterating over all the loaded images
@@ -829,16 +841,16 @@ class ConflictMapGenerator:
 
                 counter = counter + 1
 
-        elif source_database == "cmp_extended":
+        elif source_database == "cmp":
             # Reading the data
             image_list = []
             image_names = []
-            for annotatedImage in os.listdir(path_to_cmp):
-                if annotatedImage.endswith(".png"):
-                    imagePath = os.path.join(path_to_cmp, annotatedImage)
-                    image = Image.open(imagePath)
+            for annotated_image in os.listdir(path_to_cmp):
+                if annotated_image.endswith(".png"):
+                    image_path = os.path.join(path_to_cmp, annotated_image)
+                    image = Image.open(image_path)
                     image_list.append(image)
-                    image_names.append(annotatedImage)
+                    image_names.append(annotated_image)
             print(len(image_list), "annotated images have been found.")
 
             counter = 0
