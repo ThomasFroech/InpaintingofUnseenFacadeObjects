@@ -541,14 +541,14 @@ class ConflictMapGenerator:
         # Iterating over all the wall sufaces
         # This code is heavilý inspired by the citygml2objs application
         cf_map_counter = 0
-        for wallSurface in wall_surfaces:
+        for wall_surface in wall_surfaces:
 
             # -- Build the local list of vertices to speed up the indexing
             local_vertices = {}
             local_vertices['All'] = []
 
             # -- OBJ with all surfaces in the same bin
-            polys = m3dm.polygonFinder(wallSurface)
+            polys = m3dm.polygonFinder(wall_surface)
 
             # -- Process each surface
             for poly in polys:

@@ -5,12 +5,12 @@ from pyproj import Transformer
 
 class MLSPointCloud:
 
-    def __init__(self, file_path, pcdCloud=None, description=None, relating_semantic_city_model=None):
+    def __init__(self, file_path, pcd_cloud=None, description=None, relating_semantic_city_model=None):
         self._file_path = file_path
-        if pcdCloud == None:
-            self._pcdCloud = o3d.io.read_point_cloud(file_path)
+        if pcd_cloud == None:
+            self._pcd_cloud = o3d.io.read_point_cloud(file_path)
         else:
-            self._pcdCloud = pcdCloud
+            self._pcd_cloud = pcd_cloud
         self._description = description
         self._number_of_points = None
         self._relating_semantic_city_model = relating_semantic_city_model
@@ -29,8 +29,8 @@ class MLSPointCloud:
     def get_relating_conflict_maps(self):
         return self._relating_conflict_maps
 
-    def get_pcdCloud(self):
-        return self._pcdCloud
+    def get_pcd_cloud(self):
+        return self._pcd_cloud
 
     # Setter methods
 
@@ -40,8 +40,8 @@ class MLSPointCloud:
     def set_description(self, new_description):
         self._description = new_description
 
-    def set_pcdCloud(self, new_pcdCloud):
-        self._pcdCloud = new_pcdCloud
+    def set_pcd_cloud(self, new_pcdCloud):
+        self._pcd_cloud = new_pcdCloud
 
     # Adding and removing conflict maps
     def add_relating_conflict_map(self, new_conflict_map):
@@ -72,14 +72,15 @@ class MLSPointCloud:
             viewpoint_values = viewpoint_line.split(' ')[1:4]  # Ignoring the "Viewpoint" Keyword
             #print("viewpoint_values: ", viewpoint_values)
             viewpoint_array = np.array(viewpoint_values, dtype=np.float32)
-
+        else:
+            viewpoint_array = None
         return viewpoint_array
 
     # This function was not necessary in the end
     def enu_2_ecef(self, param, output_dir):
         # This function is used to convert the points from a ENU to an ECEF according to a 4x4 transformation matrix
         # It makes use of homogenous coordinates to apply the transformation
-        cloud_enu = self.get_pcdCloud()
+        cloud_enu = self.get_pcd_cloud()
         points_enu = np.asarray(cloud_enu.points)
         # Add homogeneous coordinate (1) to each point
         points_homogeneous = np.hstack((points_enu, np.ones((points_enu.shape[0], 1))))
@@ -98,7 +99,7 @@ class MLSPointCloud:
         # Update the pointcloud
         o3d.io.write_point_cloud(output_dir + self.get_description() + "_transformed.pcd", pcd_ecef,
                                  write_ascii=True)
-        self.set_pcdCloud(pcd_ecef)
+        self.set_pcd_cloud(pcd_ecef)
         self.set_description(self.get_description() + "_ecef")
         return 0
 
@@ -107,7 +108,7 @@ class MLSPointCloud:
         # This function is going to be used to convert the coordinates from the specified
         # input coordinated system to the specified output coordinate system.
         # Obtaining the points from the point cloud as a python array
-        cloud_input = self.get_pcdCloud()
+        cloud_input = self.get_pcd_cloud()
         points_input = np.asarray(cloud_input.points)
         # Converting the point array into a list of individual points for the processing
         # Creating an empty list for the coordinate tupels to be stored in
@@ -134,6 +135,6 @@ class MLSPointCloud:
         # Save the new point cloud that was created from the transformed points
         o3d.io.write_point_cloud(output_dir + self.get_description() + "_transformed.pcd", transformed_pcd, write_ascii=True)
         # Update the pointcloud
-        self.set_pcdCloud(transformed_pcd)
+        self.set_pcd_cloud(transformed_pcd)
         self.set_description(self.get_description() + "_transformed")
         return 0

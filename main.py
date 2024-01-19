@@ -69,45 +69,45 @@ print(f"RANSAC parameters {paramRansac}")
 print(f"LoD3 surface rolerance {lod3Tolerance}")
 
 # -- Find all .pcd files in the respective directory
-os.chdir(DIRECTORY_1)
+#os.chdir(DIRECTORY_1)
 # -- Supported extensions
-types = ('*.pcd')
+#types = ('*.pcd')
 # Empty python lists for storage
-files_found = []
-point_clouds = []
+#files_found = []
+#point_clouds = []
 # Finding all the .pcd files
-for files in types:
-    files_found.extend(glob.glob(files))
-files_found.pop()
+#for files in types:
+#    files_found.extend(glob.glob(files))
+#files_found.pop()
 # Iterating through all the found files
-print(len(files_found), " point clouds have been found.")
-print("Name of Fist File: ", files_found[0])
-for f in files_found:
-    FILENAME = f[:f.rfind('.pcd')]
-    #print("Filename: ", FILENAME)
-    FULLPATH = os.path.join(DIRECTORY_1, f)
-    # Creating 'MLSPointCloud objects; for ech pcd file one
-    # and append them to a python list
-    point_cloud = pcm.MLSPointCloud(file_path=FULLPATH, description=FILENAME)
-    point_clouds.append(point_cloud)
-# Create a conflict map generator object
-cMapGen_1 = cmg.ConflictMapGenerator(point_clouds=point_clouds, output_path=RESULT,
-                                     mesh_path=MESHPATH, n_div=n_div, tol=tolerance)
-cMapGen_1.create_conflict_map(spec='obj')
+#print(len(files_found), " point clouds have been found.")
+#print("Name of Fist File: ", files_found[0])
+#for f in files_found:
+#    FILENAME = f[:f.rfind('.pcd')]
+#    #print("Filename: ", FILENAME)
+#    FULLPATH = os.path.join(DIRECTORY_1, f)
+#    # Creating 'MLSPointCloud objects; for ech pcd file one
+#    # and append them to a python list
+#    point_cloud = pcm.MLSPointCloud(file_path=FULLPATH, description=FILENAME)
+#    point_clouds.append(point_cloud)
+## Create a conflict map generator object
+#cMapGen_1 = cmg.ConflictMapGenerator(point_clouds=point_clouds, output_path=RESULT,
+#                                     mesh_path=MESHPATH, n_div=n_div, tol=tolerance)
+#cMapGen_1.create_conflict_map(spec='obj')
 
 # Comment the following code block in for randomly generating conflict maps
 
 # Erstellung von Random Conflict maps
 ## Step 1: Creating a randomly generated semantic city model
-#lodspec = "LOD3_3.gml" # modify this parameter to generate random conflict maps at different LoD Levels
-#modelPath = RAND3DCOUT + "/" + lodspec
-#print("ModelPath test: ", modelPath)
-#randomCityModel = scm.SemanticCityModel(lod_level='LOD_3', citygml_version='2.0', model_path=modelPath, randomCityOutputPath=RAND3DCOUT)
-#randomCityModel.create_random_city_model(10, 'LOD_3')
-## Step 2 instantiate a ConflictMapGenerator object
-#cMapGen_1 = cmg.ConflictMapGenerator(cityModels=randomCityModel, output_path=RESULT)
-## Step 3: Call the respective function
-#cMapGen_1.create_random_conflict_map()
+lodspec = "LOD3_3.gml" # modify this parameter to generate random conflict maps at different LoD Levels
+modelPath = RAND3DCOUT + "/" + lodspec
+print("ModelPath test: ", modelPath)
+random_city_model = scm.SemanticCityModel(lod_level='LOD_3', citygml_version='2.0', model_path=modelPath, random_city_output_path=RAND3DCOUT)
+random_city_model.create_random_city_model(10, 'LOD_3')
+# Step 2 instantiate a ConflictMapGenerator object
+cMapGen_1 = cmg.ConflictMapGenerator(city_models=random_city_model, output_path=RESULT)
+# Step 3: Call the respective function
+cMapGen_1.create_random_conflict_map()
 
 
 # Comment in in case you want to derive a conflict map from an LOD3 model that has been converted to the .obj format before
