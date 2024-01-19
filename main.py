@@ -5,6 +5,7 @@ import os
 import argparse
 import glob
 import time
+import json
 
 # Messung der Startzeit
 startzeit = time.time()
@@ -47,6 +48,22 @@ try:
 except:
     print("No mesh path given.")
 
+# read the settings.json file
+# Specify the path to your settings.json file
+file_path = 'config.json'
+
+# Read the contents of the file
+with open(file_path, 'r') as file:
+    parameter_data = json.load(file)
+
+# Access the values
+n_div = parameter_data["n_div"]
+tolerance = parameter_data["tolerance"]
+
+# Print the values
+print(f"n_div: {n_div}")
+print(f"tolerance: {tolerance}")
+
 # -- Find all .pcd files in the respective directory
 os.chdir(DIRECTORY_1)
 # -- Supported extensions
@@ -57,7 +74,9 @@ point_clouds = []
 # Finding all the .pcd files
 for files in types:
     files_found.extend(glob.glob(files))
+files_found.pop()
 # Iterating through all the found files
+print(len(files_found), " point clouds have been found.")
 print("Name of Fist File: ", files_found[0])
 for f in files_found:
     FILENAME = f[:f.rfind('.pcd')]
@@ -69,7 +88,7 @@ for f in files_found:
     point_clouds.append(point_cloud)
 # Create a conflict map generator object
 cMapGen_1 = cmg.ConflictMapGenerator(pointClouds=point_clouds, output_path=RESULT,
-                                     mesh_path=MESHPATH)
+                                     mesh_path=MESHPATH, n_div=n_div, tol=tolerance)
 cMapGen_1.create_conflict_map(spec='obj')
 
 # Comment the following code block in for randomly generating conflict maps

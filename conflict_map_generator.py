@@ -280,7 +280,7 @@ class ConflictMapGenerator:
 
     # just a little helper function to define the colors in the graphics according to the evaluated hit distance
     def color_by_distance(self, diff):
-        tolerance = 0.700
+        tolerance = self.get_tol()
         if diff > tolerance:  # and diff < 3.00:
             return 'black'
         elif diff < -tolerance:  # and diff > -3.00:
@@ -319,7 +319,8 @@ class ConflictMapGenerator:
             # loading the mesh file by calling the respective function
             self.load_mesh()
             # retrieving the mesh object
-            self.subdivide_meshes(2)
+            self.subdivide_meshes(self.get_n_div())
+            print("Triangle subdivision process with", self.get_n_div(), "subdivision iterations is completed!")
             meshList = self.get_mesh()
 
             # retrieving the viewpoints for the ray casting
@@ -347,6 +348,7 @@ class ConflictMapGenerator:
                     # Berechne die quadratische Summe der Differenzen
                     distance = math.sqrt(diff_x ** 2 + diff_y ** 2 + diff_z ** 2)
                     distances.append(distance)
+                    #print(distance)
 
                     ray_directions = [diff_x, diff_y, diff_z]
                     normalized_vector = [ray_directions[0] / distance, ray_directions[1] / distance,
@@ -360,6 +362,7 @@ class ConflictMapGenerator:
 
             # defining the open3D rays
             rays = o3d.core.Tensor(rayTensor, dtype=o3d.core.Dtype.Float32)
+            print("Here: ", type(rays))
 
             # Converting the meshs into the legacy datatype and adding the to the scene
             scene = o3d.t.geometry.RaycastingScene()
