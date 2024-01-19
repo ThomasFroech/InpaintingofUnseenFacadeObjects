@@ -5,7 +5,7 @@ import subprocess
 
 class SemanticCityModel:
     # Constructor
-    def __init__(self, name=None, lod_level=None, model_path=None, description=None, citygml_version=None, randomCityOutputPath=None):
+    def __init__(self, name=None, lod_level=None, model_path=None, description=None, citygml_version=None, random_city_output_path=None):
         self._name = name
         # the LOD-Level can only be specified according to the following list
         lod_values = ["LOD_0", "LOD_1", "LOD_2", "LOD_3", "LOD_4"]
@@ -30,7 +30,7 @@ class SemanticCityModel:
         self._bounding_box = None
         self._relating_conflict_maps = []
         self._relating_point_clouds = []
-        self._randomCityOutputPath = randomCityOutputPath
+        self._random_city_output_path = random_city_output_path
 
     # Getter methods
     def get_name(self):
@@ -58,7 +58,7 @@ class SemanticCityModel:
         return self._relating_point_clouds
 
     def get_randomCityOutputPath(self):
-        return self._randomCityOutputPath
+        return self._random_city_output_path
 
     # Setter Methods
     def set_name(self, new_name):
@@ -88,8 +88,8 @@ class SemanticCityModel:
     def set_description(self, new_description):
         self._description = new_description
 
-    def set_randomCityOutputPath(self, new_randomCityOutputPath):
-        self._randomCityOutputPath = new_randomCityOutputPath
+    def set_random_city_output_path(self, new_random_city_output_path):
+        self._random_city_output_path = new_random_city_output_path
 
     # Adding or removing referencing to conflict maps
     def add_relating_conflict_map(self, new_relating_conflict_map):
@@ -209,14 +209,14 @@ class SemanticCityModel:
         # Definieren der namespaces
         namespaces = self.get_namespaces()
         # Finding all the building elements
-        cityObjects = []
+        city_objects = []
         buildings = []
         # Find all instances of cityObjectMember and put them in a list
         for obj in root.getiterator('{%s}cityObjectMember' % namespaces[0]):
-            cityObjects.append(obj)
-        if len(cityObjects) > 0:
-            for cityObject in cityObjects:
-                for child in cityObject.getchildren():
+            city_objects.append(obj)
+        if len(city_objects) > 0:
+            for city_object in city_objects:
+                for child in city_object.getchildren():
                     if child.tag == '{%s}Building' % namespaces[1]:
                         buildings.append(child)
         # Find all the "boundedBy" objects and put them in a list
@@ -225,13 +225,13 @@ class SemanticCityModel:
             for child in building.getchildren():
                 if child.tag == '{%s}boundedBy' % namespaces[1]:
                     boundedBy.append(child)
-        wallSurfaces = []
+        wall_surfaces = []
         for bby in boundedBy:
             for child in bby:
                 if child.tag == '{%s}WallSurface' % namespaces[1]:
-                    wallSurfaces.append(child)
+                    wall_surfaces.append(child)
 
-        return wallSurfaces
+        return wall_surfaces
 
     # This function has not been used in the end
     def apply_global_shift(self, path_to_shift_file, output_directory):
@@ -275,11 +275,11 @@ class SemanticCityModel:
         path_part_1 = r"Random_City_Module\randomiseCity.py"
         path_part_2 = r"Random_City_Module\generateCityGML.py"
         arg_outputfile = r"-o"
-        arg_outputfile_value = self._randomCityOutputPath + "file.xml"
+        arg_outputfile_value = self._random_city_output_path + "file.xml"
         arg_number = r"-n"
         arg_number_value = str(number)
         arg_folder = r"-o"
-        arg_folder_value = self._randomCityOutputPath
+        arg_folder_value = self._random_city_output_path
         arg_filename = r"-i"
 
         # Execute the first part of the random citygml creation

@@ -91,7 +91,7 @@ for f in files_found:
     point_cloud = pcm.MLSPointCloud(file_path=FULLPATH, description=FILENAME)
     point_clouds.append(point_cloud)
 # Create a conflict map generator object
-cMapGen_1 = cmg.ConflictMapGenerator(pointClouds=point_clouds, output_path=RESULT,
+cMapGen_1 = cmg.ConflictMapGenerator(point_clouds=point_clouds, output_path=RESULT,
                                      mesh_path=MESHPATH, n_div=n_div, tol=tolerance)
 cMapGen_1.create_conflict_map(spec='obj')
 

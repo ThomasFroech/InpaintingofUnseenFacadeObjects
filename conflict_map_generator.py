@@ -14,31 +14,31 @@ from scipy.linalg import svd
 
 class ConflictMapGenerator:
 
-    def __init__(self, pointClouds=None, cityModels=None, output_path=None, mesh_path=None, ground_truth_path=None,
-                 n_div=0, tol=0, ransacParam=None, lod3Tolerance=None):
-        self._pointClouds = pointClouds
-        self._cityModels = cityModels
+    def __init__(self, point_clouds=None, city_models=None, output_path=None, mesh_path=None, ground_truth_path=None,
+                 n_div=0, tol=0, ransac_param=None, lod3_tolerance=None):
+        self._point_clouds = point_clouds
+        self._city_models = city_models
         self._output_path = output_path
         self._mesh = None
-        self._meshPath = mesh_path
+        self._mesh_path = mesh_path
         self._ground_truth_path = ground_truth_path
         self._n_div = n_div
         self._tol = tol
-        self._ransacParam = ransacParam
-        self._lod3Tolerance = lod3Tolerance
+        self._ransac_param = ransac_param
+        self._lod3_tolerance = lod3_tolerance
 
     # Getter methods
-    def get_pointClouds(self):
-        return self._pointClouds
+    def get_point_clouds(self):
+        return self._point_clouds
 
-    def get_cityModels(self):
-        return self._cityModels
+    def get_city_models(self):
+        return self._city_models
 
     def get_output_path(self):
         return self._output_path
 
-    def get_meshPath(self):
-        return self._meshPath
+    def get_mesh_path(self):
+        return self._mesh_path
 
     def get_mesh(self):
         return self._mesh
@@ -52,24 +52,24 @@ class ConflictMapGenerator:
     def get_tol(self):
         return self._tol
 
-    def get_ransacParam(self):
-        return self._ransacParam
+    def get_ransac_param(self):
+        return self._ransac_param
 
-    def get_lod3Tolerance(self):
-        return self._lod3Tolerance
+    def get_lod3_tolerance(self):
+        return self._lod3_tolerance
 
     # Setter methods
-    def set_pointClouds(self, new_pointClouds):
-        self._pointClouds = new_pointClouds
+    def set_point_clouds(self, new_pointClouds):
+        self._point_clouds = new_pointClouds
 
-    def set_cityModels(self, new_clityModels):
-        self._cityModels = new_clityModels
+    def set_city_models(self, new_clityModels):
+        self._city_models = new_clityModels
 
     def set_output_path(self, new_output_path):
         self._output_path = new_output_path
 
-    def set_meshPath(self, newMeshPath):
-        self._meshPath = newMeshPath
+    def set_mesh_path(self, newMeshPath):
+        self._mesh_path = newMeshPath
 
     def set_mesh(self, new_mesh):
         self._mesh = new_mesh
@@ -84,10 +84,10 @@ class ConflictMapGenerator:
         self._tol = new_tol
 
     def set_ransacParam(self, new_ransacParam):
-        self._ransacParam = new_ransacParam
+        self._ransac_param = new_ransacParam
 
     def set_lod3Tolerance(self, new_lod3Tolerance):
-        self._lod3Tolerance = new_lod3Tolerance
+        self._lod3_tolerance = new_lod3Tolerance
 
     # Further Methods
     # This function is copied from the CityGML2OBJ functionality
@@ -104,7 +104,7 @@ class ConflictMapGenerator:
 
     # A small function to load the .obj files and create a list of  open3D meshes from them
     def load_mesh(self):
-        ppath = self.get_meshPath()
+        ppath = self.get_mesh_path()
         mesh_list = []  # Liste, in der die Mesh-Objekte gespeichert werden
 
         # Durchsuchen des Verzeichnisses nach Dateien
@@ -132,7 +132,7 @@ class ConflictMapGenerator:
     def create_mesh_from_CityGML(self):
         # The code in this function is based on the CityGML2OBJFunctionality
         # Get the City model
-        cityModel = self.get_cityModels()
+        cityModel = self.get_city_models()
 
         # Reading and parsing the CityGML file(s)
         tree = etree.parse(cityModel.get_model_path())
@@ -140,23 +140,23 @@ class ConflictMapGenerator:
         root = tree.getroot()
 
         # Initilaize empty arrays
-        cityObjects = []
+        city_objects = []
         buildings = []
 
         # get the namespaces
-        namespaces = self.get_cityModels().get_namespaces()
+        namespaces = self.get_city_models().get_namespaces()
 
         # Find all instances of cityObjectMember and put them in a list
         for obj in root.getiterator('{%s}cityObjectMember' % namespaces[0]):
-            cityObjects.append(obj)
+            city_objects.append(obj)
 
-        if len(cityObjects) > 0:
+        if len(city_objects) > 0:
             # Report the progress and contents of the CityGML file
-            print("\tThere are", len(cityObjects), "cityObject(s) in this CityGML file.")
+            print("\tThere are", len(city_objects), "city_object(s) in this CityGML file.")
 
             # -- Store each building separately
-            for cityObject in cityObjects:
-                for child in cityObject.getchildren():
+            for city_object in city_objects:
+                for child in city_object.getchildren():
                     if child.tag == '{%s}Building' % namespaces[1]:
                         buildings.append(child)
 
@@ -237,7 +237,7 @@ class ConflictMapGenerator:
 
         return 0
 
-    def project_Polygon_to_2D(self, polygon, projectionDirection=None, returnProjectionDirection=False):
+    def project_Polygon_to_2D(self, polygon, projection_direction=None, return_projection_direction=False):
         # The code in this function is basen on the CityGML2OBJs application (https://github.com/tudelft3d/CityGML2OBJs)
         # and (https://github.com/tum-gis/CityGML2OBJv2)
         vertical = True
@@ -249,7 +249,7 @@ class ConflictMapGenerator:
             all_x = all(x == projected_polygon[0][0] for x, _ in projected_polygon)
             all_z = all(z == projected_polygon[0][1] for _, z in projected_polygon)
 
-            if projectionDirection is None:
+            if projection_direction is None:
                 if all_x or all_z:
                     # Switch the projection direction to the other coordinate plane
                     if all_x:
@@ -257,7 +257,7 @@ class ConflictMapGenerator:
                     elif all_z:
                         projected_polygon = [[point[0], point[1]] for point in polygon]
 
-            if returnProjectionDirection and projectionDirection is None:
+            if return_projection_direction and projection_direction is None:
                 if all_x:
                     return projected_polygon, 'all_x'
                 if all_z:
@@ -265,19 +265,19 @@ class ConflictMapGenerator:
                 else:
                     return projected_polygon, 'correct'
 
-            if projectionDirection == 'all_x':
+            if projection_direction == 'all_x':
                 projected_polygon = [[point[1], point[2]] for point in polygon]
                 return projected_polygon
 
-            if projectionDirection == 'all_z':
+            if projection_direction == 'all_z':
                 projected_polygon = [[point[0], point[1]] for point in polygon]
                 return projected_polygon
 
-            if projectionDirection == "correct":
+            if projection_direction == "correct":
                 projected_polygon = [[point[0], point[2]] for point in polygon]
                 return projected_polygon
 
-            if projectionDirection is None and returnProjectionDirection is False:
+            if projection_direction is None and return_projection_direction is False:
                 return projected_polygon
         else:
             return None
@@ -335,11 +335,11 @@ class ConflictMapGenerator:
             # retrieving the mesh object
             self.subdivide_meshes(self.get_n_div())
             print("Triangle subdivision process with", self.get_n_div(), "subdivision iterations is completed!")
-            meshList = self.get_mesh()
+            mesh_list = self.get_mesh()
 
             # retrieving the viewpoints for the ray casting
             viewpoints = []
-            for pointcloud in self.get_pointClouds():
+            for pointcloud in self.get_point_clouds():
                 viewpoint = pointcloud.get_Viewpoint()
                 viewpoints.append(viewpoint)
             viewpoints.pop()
@@ -349,9 +349,9 @@ class ConflictMapGenerator:
             pointss = []
             distances = []
             rayTensor = []
-            for index in range(len(self.get_pointClouds()) - 1):  # Iterate over all the point clouds
+            for index in range(len(self.get_point_clouds()) - 1):  # Iterate over all the point clouds
                 # Get all the points of a point cloud
-                allPoints = self.get_pointClouds()[index].get_pcdCloud().points
+                allPoints = self.get_point_clouds()[index].get_pcdCloud().points
                 for point in allPoints:  # Iterate over all the points in the point cloud
 
                     # Berechne die quadrierten Differenzen der x-, y- und z-Koordinaten
@@ -382,7 +382,7 @@ class ConflictMapGenerator:
             scene = o3d.t.geometry.RaycastingScene()
             converted_meshes = []
             mesh_ids = []
-            for mesh in meshList:
+            for mesh in mesh_list:
                 converted_mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
                 mesh_id = scene.add_triangles(converted_mesh)
                 mesh_ids.append(mesh_id)
@@ -423,7 +423,7 @@ class ConflictMapGenerator:
                 indices_hit = np.where(hit_geometries == geometry_index)
 
                 # get the corresponding mesh:
-                mesh = meshList[geometry_index]
+                mesh = mesh_list[geometry_index]
 
                 # get all the indices of the hit triangles and append them to a list:
                 # in this list, a triangle can appear more than just once
@@ -491,7 +491,7 @@ class ConflictMapGenerator:
                     ax.axis('off')
                     ax.autoscale_view()
 
-                    name = self.get_meshPath()
+                    name = self.get_mesh_path()
 
                     output_filename = "conflict_map_" + str(geometry_index)
                     output_filepath = os.path.join(self.get_output_path(), output_filename)
@@ -535,13 +535,13 @@ class ConflictMapGenerator:
         # The code in this function is basen on the CityGML2OBJs application (https://github.com/tudelft3d/CityGML2OBJs)
         # and (https://github.com/tum-gis/CityGML2OBJv2)
         # obtaining the wall surfaces
-        model = self.get_cityModels()
-        wallSurfaces = model.get_wall_surfaces()
+        model = self.get_city_models()
+        wall_surfaces = model.get_wall_surfaces()
 
         # Iterating over all the wall sufaces
         # This code is heavilý inspired by the citygml2objs application
-        cfMapCounter = 0
-        for wallSurface in wallSurfaces:
+        cf_map_counter = 0
+        for wallSurface in wall_surfaces:
 
             # -- Build the local list of vertices to speed up the indexing
             local_vertices = {}
@@ -609,15 +609,15 @@ class ConflictMapGenerator:
                     ax.set_title('')
                     # ax.grid(True)
 
-                    output_filename = "conflict_map_" + str(cfMapCounter)
+                    output_filename = "conflict_map_" + str(cf_map_counter)
                     output_filepath = os.path.join(self.get_output_path(), output_filename)
 
                     # saving the figure
                     plt.savefig(output_filepath)
 
                     plt.close(fig)
-                    cfMapCounter = cfMapCounter + 1
-                    print("counter: ", cfMapCounter)
+                    cf_map_counter = cf_map_counter + 1
+                    print("counter: ", cf_map_counter)
 
                     # Removing the white borders around the actual conflict maps
                     image = Image.open(os.path.join(self.get_output_path(), output_filename + ".png"))
@@ -668,7 +668,7 @@ class ConflictMapGenerator:
             filenamewithoutobj = filename.replace(".ply", "")
             print("filename: ", filename)
             original_mesh = o3d.io.read_triangle_mesh(os.path.join(lod3GroundTruthPath, filename))
-            mesh = original_mesh.subdivide_midpoint(number_of_iterations=7)
+            mesh = original_mesh.subdivide_midpoint(number_of_iterations=self.get_n_div())
             # Access the vertices and triangles
             vertices = mesh.vertices
             vertices_array = np.asarray(vertices)
@@ -700,7 +700,7 @@ class ConflictMapGenerator:
             # calculation of the main facade plane with RANSAC
             plane1 = pyrsc.Plane()
             print(rotated_points.shape)
-            best_eq, best_inliers = plane1.fit(rotated_points, self.get_ransacParam()["thresh"], self.get_ransacParam()["minPoints"],self.get_ransacParam()["maxIteration"])
+            best_eq, best_inliers = plane1.fit(rotated_points, self.get_ransac_param()["thresh"], self.get_ransac_param()["minPoints"], self.get_ransac_param()["maxIteration"])
             a = best_eq[0]
             b = best_eq[1]
             c = best_eq[2]
@@ -722,13 +722,13 @@ class ConflictMapGenerator:
                 for point in triangle_vertices:
                     distance = abs(a * point[0] + b * point[1] + c * point[2] + d) / np.sqrt(a ** 2 + b ** 2 + c ** 2)
 
-                    if distance > self.get_lod3Tolerance():
+                    if distance > self.get_lod3_tolerance():
                         confirming = False
                         # project the triangle to 2D
                         # if confirming == True:
                         # print("Confirming: ", confirming)
 
-                projectedTriangle = self.project_Polygon_to_2D(triangle_vertices, projectionDirection='all_x')
+                projectedTriangle = self.project_Polygon_to_2D(triangle_vertices, projection_direction='all_x')
 
                 if confirming == True:
                     triangle_patch = Polygon(projectedTriangle, closed=True, edgecolor='green', linewidth=0.1,
@@ -766,7 +766,6 @@ class ConflictMapGenerator:
     def deriveFromAnnotation(self, source_database):
         # This function can be applied ion order to derive conflict maps from annotated images of facades
         # There is functionalities to deploy it for the cmp-database and the etrims database
-
         # Todo: Add functionalities to give the path to this function vie the environment variables
         path_to_etrims = []
         path_to_cmp = []
