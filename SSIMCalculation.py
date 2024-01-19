@@ -9,8 +9,8 @@ from skimage import io, color, measure
 import statistics
 
 # Define the paths to the two folders containing images
-folder1 = '/home/photolap/Documents/Masterarbeit_Froech/SSM_Experiments/CMP_Original_Resampled_000_rem' # The folder containing the original Dataset
-folder2 = '/home/photolap/Documents/Masterarbeit_Froech/Archiv/Experiments_Lama/CMP/output_lama_inference' # the folder containing the dataset with the inpainted images
+folder1 = '' # The folder containing the original Dataset
+folder2 = '' # the folder containing the dataset with the inpainted images
 
 # Get the list of image files in each folder
 images1 = [f for f in os.listdir(folder1) if f.endswith('.png')]
