@@ -15,7 +15,7 @@ from scipy.linalg import svd
 class ConflictMapGenerator:
 
     def __init__(self, pointClouds=None, cityModels=None, output_path=None, mesh_path=None, ground_truth_path=None,
-                 n_div=0, tol=0, ransacParam=None):
+                 n_div=0, tol=0, ransacParam=None, lod3Tolerance=None):
         self._pointClouds = pointClouds
         self._cityModels = cityModels
         self._output_path = output_path
@@ -25,6 +25,7 @@ class ConflictMapGenerator:
         self._n_div = n_div
         self._tol = tol
         self._ransacParam = ransacParam
+        self._lod3Tolerance = lod3Tolerance
 
     # Getter methods
     def get_pointClouds(self):
@@ -51,8 +52,11 @@ class ConflictMapGenerator:
     def get_tol(self):
         return self._tol
 
-    def getransacParam(self):
+    def get_ransacParam(self):
         return self._ransacParam
+
+    def get_lod3Tolerance(self):
+        return self._lod3Tolerance
 
     # Setter methods
     def set_pointClouds(self, new_pointClouds):
@@ -81,6 +85,9 @@ class ConflictMapGenerator:
 
     def set_ransacParam(self, new_ransacParam):
         self._ransacParam = new_ransacParam
+
+    def set_lod3Tolerance(self, new_lod3Tolerance):
+        self._lod3Tolerance = new_lod3Tolerance
 
     # Further Methods
     # This function is copied from the CityGML2OBJ functionality
@@ -693,7 +700,7 @@ class ConflictMapGenerator:
             # calculation of the main facade plane with RANSAC
             plane1 = pyrsc.Plane()
             print(rotated_points.shape)
-            best_eq, best_inliers = plane1.fit(rotated_points, self.getransacParam()["thresh"], self.getransacParam()["minPoints"],self.getransacParam()["maxIteration"])
+            best_eq, best_inliers = plane1.fit(rotated_points, self.get_ransacParam()["thresh"], self.get_ransacParam()["minPoints"],self.get_ransacParam()["maxIteration"])
             a = best_eq[0]
             b = best_eq[1]
             c = best_eq[2]
@@ -715,7 +722,7 @@ class ConflictMapGenerator:
                 for point in triangle_vertices:
                     distance = abs(a * point[0] + b * point[1] + c * point[2] + d) / np.sqrt(a ** 2 + b ** 2 + c ** 2)
 
-                    if distance > 0.3:
+                    if distance > self.get_lod3Tolerance():
                         confirming = False
                         # project the triangle to 2D
                         # if confirming == True:
