@@ -4,6 +4,7 @@ from PIL import Image as im
 
 # The code in this Python file is based on the research from the following paper: [Anonymized]
 
+def normalize(pointArray):
     # this function is used to perform a pose normalization of the input
     # point data.
     # Step 1: Translation: move the whole point cloud to the
