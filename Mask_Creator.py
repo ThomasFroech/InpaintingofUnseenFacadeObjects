@@ -67,21 +67,31 @@ def normalize(pointArray):
 
 # The code starts here
 
-# Step 1: defining tha path to the point cloud data
+# Step 1: Defining the path to the point cloud
 path2cloud = r"..."
+
+# Spec must be either 'xz' or 'yz' according to the plane that should be chosen
+spec = 'xz'
+
+# Defining the size of the image
+numberOfRows = 339
+numberOfColumns = 453
+
 # Step 2: loading the point cloud data
 tree = o3d.io.read_point_cloud(path2cloud)
 print("point cloud has been sucessfully loaded")
-# Step 3: projecting th point cloud to one of the coordinat eplanes
-# Spec must be either 'xz' or 'yz' accoring to the plane that should be choses
-spec = 'xz'
+
+
 # Obtaining the tree-points
 treepoints_tmp = np.asarray(tree.points)
 
+# Normalize the point cloud
 normalized_tree_pointcloud = normalize(treepoints_tmp)
 
+# Convert to a numpy array
 treepoints = np.asarray(normalized_tree_pointcloud.points)
 
+# Step 3: Projecting the point cloud to one of the coordinate planes
 if spec == 'xz':
     treepoints_projected = treepoints[:, 1:]
 elif spec == 'yz':
@@ -99,40 +109,35 @@ else:
     treepoints_projected = None
 
 treepoints_projected = treepoints_projected
-print(treepoints_projected)
-print("point cloud has been projected")
+
 # Step 4: performing the image generation
-#defining the size of the image
-numberOfRows = 339
-numberOfColumns = 453
 startimage = np.zeros((numberOfRows, numberOfColumns), dtype=np.uint8)
-print("The startimage has been created")
 
-
-# Step 2 : Sample the projected point cloud
-# Step 2.1: Calculate the necessary sampling distance
+# Step 5 Calculating the maximal Extent of the point cloud
 maxExtentX = max(abs(treepoints_projected[:, 0]))
 # print("Ind_maxExtentX: ", maxExtentX)
 maxExtentY = max(abs(treepoints_projected[:, 1]))
 # print("Ind_maxExtentY: ", maxExtentY)
 maxValues = [maxExtentX+1, maxExtentY+1]
 gesMax = max(maxValues)
-print("gesMax: ", gesMax)
+#print("gesMax: ", gesMax)
 pixelSize = (2 * gesMax) / numberOfColumns
-print("Pixel Size: ", pixelSize)
-# Step 3 : Create a Grid in order to sample the projected point cloud
+#print("Pixel Size: ", pixelSize)
+
+# Step 6 : Create a Grid in order to sample the projected point cloud
 grid = np.ceil(treepoints_projected / pixelSize)
 # print("Grid: ", grid)
-# Translate the matrix to the center so that there are only positive values
+
+# Step 7: Translate the matrix to the center so that there are only positive values
 shape = np.shape(grid)
 grid_trans = np.zeros(shape)
 counter1 = 0
 for i in grid[:, 0]:
-    grid_trans[counter1, 0] = grid[counter1, 0] + (numberOfRows) / 2
+    grid_trans[counter1, 0] = grid[counter1, 0] + numberOfRows / 2
     counter1 = counter1 + 1
 counter2 = 0
 for j in grid[:, 1]:
-    grid_trans[counter2, 1] = grid[counter2, 1] + (numberOfColumns) / 2
+    grid_trans[counter2, 1] = grid[counter2, 1] + numberOfColumns / 2
     counter2 = counter2 + 1
 # Assign the values to the respective raster cells
 counter = 0
@@ -144,6 +149,7 @@ for i in grid_trans[:, 0]:
     startimage[a, b] = 250
     # print("yoo")
     counter = counter + 1
-# write the image to a test file in order to inspect the result
+
+# Step 8 write the image to a test file in order to inspect the result
 data = im.fromarray(startimage)
 data.show()
