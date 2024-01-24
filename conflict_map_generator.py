@@ -488,9 +488,7 @@ class ConflictMapGenerator:
                                                      facecolor=self.color_by_distance(avg_distance))
                             patches.append(triangle_patch)
                         except:
-                            print(
-                                "b: The normal of the polygon has no magnitude. Check the polygon. The most common cause for this are two identical sequential points or collinear points.")
-                            print("")
+                            print("An error has occured")
                     # Erstelle die PatchCollection
                     collection = PatchCollection(patches, match_original=True)
 
