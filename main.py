@@ -7,7 +7,6 @@ import glob
 import time
 import json
 
-# Messung der Startzeit
 starting_time = time.time()
 
 # -- Parse command-line arguments
