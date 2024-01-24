@@ -2,13 +2,8 @@ import open3d as o3d
 import numpy as np
 from PIL import Image as im
 
-# The code in this Python file is based on the research from the following paper:
+# The code in this Python file is based on the research from the following paper: [Anonymized]
 
-#Thomas Fröch, Olaf Wysocki, Ludwig Hoegner, and Uwe Stilla. Reconstructing
-#façade details using MLS pointclouds and Bag-of-Words approach. In Recent
-#Advances in 3D Geoinformation Science, 2023
-
-def normalize(pointArray):
     # this function is used to perform a pose normalization of the input
     # point data.
     # Step 1: Translation: move the whole point cloud to the
