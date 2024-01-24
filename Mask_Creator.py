@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image as im
 
 # The code in this Python file is based on the research from the following paper: [Anonymized]
+# Please note that the code implemented is fully experimental.
 
 def normalize(pointArray):
     # this function is used to perform a pose normalization of the input
