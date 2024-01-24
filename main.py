@@ -8,7 +8,7 @@ import time
 import json
 
 # Messung der Startzeit
-startzeit = time.time()
+starting_time = time.time()
 
 # -- Parse command-line arguments
 PARSER = argparse.ArgumentParser(description='Masters Thesis Fröch')
@@ -121,15 +121,15 @@ print(f"LoD3 surface rolerance {lod3Tolerance}")
 
 # cMapGen_1.create_conflict_map_from_LOD3()
 
-# Messung der Endzeit
-# endzeit = time.time()
-
-# Berechnung der Laufzeit
-# laufzeit = endzeit - startzeit
-# print(f"The duration of the program was {laufzeit:.6f} seconds")
-
 # Comment this part in if you want to derive conflict maps from either the CMP-database of
 # annotated images or from the ETrims database of annotated images
 # Step 1: Create a ConflictMapGenerator object
 cMapGen_1 = cmg.ConflictMapGenerator(output_path=RESULT, path_to_annot_images=ANNDIR)
 cMapGen_1.derive_from_annotation('cmp')
+
+# Duration measurement
+time_end = time.time()
+
+# Calculation of Runtime
+duration = time_end - starting_time
+print(f"The duration of the program was {duration:.6f} seconds")
