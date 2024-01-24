@@ -64,8 +64,10 @@ def normalize(pointArray):
     return pcd
 
 
+# The code starts here
+
 # Step 1: defining tha path to the point cloud data
-path2cloud = r"/home/photolap/Documents/Masterarbeit_Froech/Baum_Philipp/nicetree23.pcd"
+path2cloud = r"..."
 # Step 2: loading the point cloud data
 tree = o3d.io.read_point_cloud(path2cloud)
 print("point cloud has been sucessfully loaded")
