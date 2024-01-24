@@ -102,17 +102,17 @@ print(f"LoD3 surface rolerance {lod3Tolerance}")
 # Comment the following code block in for randomly generating conflict maps
 
 # Erstellung von Random Conflict maps
-## Step 1: Creating a randomly generated semantic city model
-#lodspec = "LOD3_3.gml"  # modify this parameter to generate random conflict maps at different LoD Levels
-#model_path = RAND3DCOUT + "/" + lodspec
-#print("ModelPath test: ", model_path)
-#random_city_model = scm.SemanticCityModel(lod_level='LOD_3', citygml_version='2.0', model_path=model_path,
-#                                          random_city_output_path=RAND3DCOUT)
-#random_city_model.create_random_city_model(10, 'LOD_3')
-## Step 2 instantiate a ConflictMapGenerator object
-#cMapGen_1 = cmg.ConflictMapGenerator(city_models=random_city_model, output_path=RESULT)
-## Step 3: Call the respective function
-#cMapGen_1.create_random_conflict_map()
+# Step 1: Creating a randomly generated semantic city model (at the moment only works for LOD3 level)
+lodspec = "LOD3_3.gml"  # modify this parameter to generate random conflict maps at different LoD Levels
+model_path = RAND3DCOUT + "/" + lodspec
+print("ModelPath test: ", model_path)
+random_city_model = scm.SemanticCityModel(lod_level='LOD_3', citygml_version='2.0', model_path=model_path,
+                                          random_city_output_path=RAND3DCOUT)
+random_city_model.create_random_city_model(10, 'LOD_3')
+# Step 2 instantiate a ConflictMapGenerator object
+cMapGen_1 = cmg.ConflictMapGenerator(city_models=random_city_model, output_path=RESULT)
+# Step 3: Call the respective function
+cMapGen_1.create_random_conflict_map()
 
 # Comment in in case you want to derive a conflict map from an LOD3 model that has been converted to the .obj format before
 # Finding all CityGML datasets
@@ -123,8 +123,8 @@ print(f"LoD3 surface rolerance {lod3Tolerance}")
 # Comment this part in if you want to derive conflict maps from either the CMP-database of
 # annotated images or from the ETrims database of annotated images
 # Step 1: Create a ConflictMapGenerator object
-cMapGen_1 = cmg.ConflictMapGenerator(output_path=RESULT, path_to_annot_images=ANNDIR)
-cMapGen_1.derive_from_annotation('cmp')
+#cMapGen_1 = cmg.ConflictMapGenerator(output_path=RESULT, path_to_annot_images=ANNDIR)
+#cMapGen_1.derive_from_annotation('cmp')
 
 # Duration measurement
 time_end = time.time()

@@ -201,7 +201,7 @@ class SemanticCityModel:
         # # Delft University of Technology
         # # fbiljecki@gmail.com
         # CityGML-Datei laden
-        self.set_model_path(self.get_randomCityOutputPath())
+        self.set_model_path(self.get_randomCityOutputPath()+"\LOD3_3.gml")
         tree = etree.parse(self.model_path)
         print("Tree:", tree)
         root = tree.getroot()
