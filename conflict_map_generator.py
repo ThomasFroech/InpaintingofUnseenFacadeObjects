@@ -468,8 +468,7 @@ class ConflictMapGenerator:
                                                      facecolor='blue')
                             patches.append(triangle_patch)
                         except:
-                            print(
-                                "a: The normal of the polygon has no magnitude. Check the polygon. The most common cause for this are two identical sequential points or collinear points.")
+                            print("An error has occured")
 
                     # iterate over the dictionary
                     for triangle_index, avg_distance in dictionary.items():
@@ -497,8 +496,6 @@ class ConflictMapGenerator:
                     ax.add_collection(collection)
                     ax.axis('off')
                     ax.autoscale_view()
-
-                    name = self.get_mesh_path()
 
                     output_filename = "conflict_map_" + str(geometry_index)
                     output_filepath = os.path.join(self.get_output_path(), output_filename)
@@ -707,7 +704,9 @@ class ConflictMapGenerator:
             # calculation of the main facade plane with RANSAC
             plane1 = pyrsc.Plane()
             print(rotated_points.shape)
-            best_eq, best_inliers = plane1.fit(rotated_points, self.get_ransac_param()["thresh"], self.get_ransac_param()["minPoints"], self.get_ransac_param()["maxIteration"])
+            best_eq, best_inliers = plane1.fit(rotated_points, self.get_ransac_param()["thresh"],
+                                               self.get_ransac_param()["minPoints"],
+                                               self.get_ransac_param()["maxIteration"])
             a = best_eq[0]
             b = best_eq[1]
             c = best_eq[2]
@@ -770,6 +769,7 @@ class ConflictMapGenerator:
             print("counter: ", cfMapCounter)
 
         return 0
+
     def derive_from_annotation(self, source_database):
         # This function can be applied ion order to derive conflict maps from annotated images of facades
         # There is functionalities to deploy it for the cmp-database and the etrims database
