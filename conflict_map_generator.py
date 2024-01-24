@@ -214,39 +214,43 @@ class ConflictMapGenerator:
                     try:
                         # Try to perform the triangulation
                         t = p3dm.triangulation(epoints_clean, irings)
-                        # print("t: ", t)
+
                         # Iterate over all the triangles in the triangulated polygon
                         for triangle in t:
+
                             # Iterate over all the vertices in the triangle
                             for vertex in triangle:
+
                                 # Append the vertices to the vertex-list
                                 vertexlist.append(vertex)
                                 length_vertices = length_vertices + 1
+
                         print("Ende erreicht!")
                     except:
                         print("An error has occurred!")
             print("VertexList: ", vertexlist)
+
             # Create a list that indicates which points belong to a triangle
             triangles = [[i, i + 1, i + 2] for i in range(0, length_vertices - 2, 3)]
             print("Triangles: ", triangles)
+
             # Create an open3D point cloud from the vertices
             point_cloud = o3d.geometry.PointCloud()
             point_cloud.points = o3d.utility.Vector3dVector(vertexlist)
             num_points = len(point_cloud.points)
             print("Number of points in the point cloud:", num_points)
+
             # Create the open3D mesh
             mesh = o3d.geometry.TriangleMesh()
             mesh.vertices = point_cloud.points
             mesh.triangles = o3d.utility.Vector3iVector(triangles)
-            # Visualize
-            o3d.visualization.draw_geometries([mesh])
-            self.set_mesh(mesh)
 
         return 0
 
     def project_Polygon_to_2D(self, polygon, projection_direction=None, return_projection_direction=False):
         # The code in this function is basen on the CityGML2OBJs application (https://github.com/tudelft3d/CityGML2OBJs)
         # and (https://github.com/tum-gis/CityGML2OBJv2)
+
         vertical = True
         if vertical:
 
