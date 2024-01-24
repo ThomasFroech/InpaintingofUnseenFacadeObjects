@@ -1,0 +1,9 @@
+{
+    "resample_size_x": 1000,
+    "resample_size_y": 1000,
+    "threshold_fragmentation": 0.15,
+    "threshold_symmetry": "0.5",
+    "num_angles": 360,
+    "unique_identifier": "sks"
+}
+
