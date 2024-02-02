@@ -773,7 +773,7 @@ class ConflictMapGenerator:
         return 0
 
     def derive_from_annotation(self, source_database):
-        # This function can be applied ion order to derive conflict maps from annotated images of facades
+        # This function can be applied in order to derive conflict maps from annotated images of facades
         # There is functionalities to deploy it for the cmp-database and the etrims database
         # Source database can take two different parameter:
         #  1. "cmp"
