@@ -22,7 +22,7 @@ Since the stable Diffusion Image Inpainting model got taken down from HF, you ne
 
 ##  Reference
 
-If you use this repo please considering linking it or citing the [paper](https://arxiv.org/abs/2502.14940)
+If you use this repo please consider linking it or citing the [paper](https://arxiv.org/abs/2502.14940)
 ```plain
 @article{facadiffy,
       title={FacaDiffy: Inpainting unseen facade parts using diffusion models}, 
