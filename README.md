@@ -1,4 +1,11 @@
 # Inpainting of Unseen Facade Objects
+<p align="center">
+<img src="https://github.com/user-attachments/assets/f1f02d4f-c9ba-4387-a09b-833e048c2114" alt="Figure_1_version_4" width="400"/>
+</p>
+
+This repository contains the corresponding implementatin and supplementara materia for the paper `FacaDiffy: Inpainting unseen facade parts using diffusion models`.
+
+Please note that this code in this repository is purely experimental and will not be maintained in the future!
 
 ![Figure_4_with_Numbers drawio(3)](https://github.com/user-attachments/assets/f80e34dd-3191-4f6a-ac70-ae9a266f819d)
 
